@@ -1,34 +1,44 @@
 var Stack = function(){
   var someInstance = {};
-  var counter = 0;
-  var topOfStack = 0;
+  var timesCalledPush = 0;
+  var timesCalledPop = 0;
+  var toPop = 0;
 
   // Use an object with numeric keys to store values
   var storage = {};
 
   // Implement the methods below
   someInstance.push = function(value){
-  
-    storage[counter] = value;
-    counter++;
+    storage[timesCalledPush] = value;
+    if(timesCalledPush === 0){
+      toPop = 0;
+      timesCalledPush++;
+    } else {
+      toPop++;
+      timesCalledPush++;
+    }
+    
 
   };
 
   someInstance.pop = function(){
 
-    var temporary = {};
-    temporary["answer"] = storage[counter];
-    counter--;
-    delete storage[counter];
-    return temporary["answer"];
+    var temporary = storage[toPop];
+    delete storage[toPop];
+    timesCalledPop++;
+    toPop--;
+    if(toPop < 0){
+      toPop = 0;
+    }
+    return temporary;
 
   };
 
   someInstance.size = function(){
-    if (counter-topOfStack < 0){
+    if (timesCalledPush - timesCalledPop < 0){
       return 0;
     }
-    return counter;
+    return timesCalledPush - timesCalledPop;
   };
 
   return someInstance;

@@ -20,13 +20,12 @@ var Queue = function(){
 
   someInstance.dequeue = function(){
 
-    var temporary = {};
-    temporary["answer"] = storage[toDequeue];
+    var temporary = storage[toDequeue];
 
     delete storage[toDequeue];
     timesCalledDequeue +=1;
     toDequeue+=1;  
-    return temporary["answer"];
+    return temporary;
 
 
   };
