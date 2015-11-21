@@ -5,7 +5,6 @@
 // Instantiate a new graph
 var Graph = function(){
 	this.storage = {};
-	this.connections = [];
 	// can we pass a connections property to a string?
 };
 
@@ -53,6 +52,9 @@ Graph.prototype.hasEdge = function(fromNode, toNode){
 // ------------------------
 // Connects two nodes in a graph by adding an edge between them.
 Graph.prototype.addEdge = function(fromNode, toNode){
+  if(this.storage[fromNode] === undefined){
+  	this.addNode(fromNode);
+  }	
   this.storage[fromNode].push(toNode);
   this.storage[toNode].push(fromNode);
 
@@ -61,11 +63,25 @@ Graph.prototype.addEdge = function(fromNode, toNode){
 // ------------------------
 // Remove an edge between any two specified (by value) nodes.
 Graph.prototype.removeEdge = function(fromNode, toNode){
+	for(var i = 0; i < this.storage[fromNode].length; i++){
+		if(this.storage[fromNode][i] === toNode){
+			this.storage[fromNode].splice(i,1);
+		}
+	}
+	for(var i = 0; i< this.storage[toNode].length; i++){
+		if(this.storage[toNode][i] === fromNode){
+			this.storage[toNode].splice(i,1);
+		}
+	}
 };
 
 // ------------------------
 // Pass in a callback which will be executed on each node of the graph.
 Graph.prototype.forEachNode = function(cb){
+
+	for (var key in this.storage){
+		cb(key);
+	}
 };
 
 /*
