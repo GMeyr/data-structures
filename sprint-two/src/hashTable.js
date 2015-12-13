@@ -1,6 +1,7 @@
 var HashTable = function(){
-  this._limit = 8;
+  this._limit = 4;
   this._storage = LimitedArray(this._limit);
+  this._stored = 0;
 };
 
 HashTable.prototype.insert = function(k, v){
@@ -21,9 +22,25 @@ HashTable.prototype.insert = function(k, v){
       }
     }
   }
+  console.log("current limit: ", this._limit);
 
   this._storage.set(i, bucket);
-};
+  this._stored += 1;
+  if( this._stored > this._limit * 0.75 ){
+    var trueStored = 0;
+    for( var j = 0; j < this._limit; j++ ){
+      if( this._storage.get(j) ){
+        trueStored += 1;
+      }
+    }
+    if( trueStored > this._limit * 0.75 ){
+      this._limit *= 2;
+      console.log("new limit: ", this._limit)
+    }
+
+
+  }};
+
 
 HashTable.prototype.retrieve = function(k){
   var i = getIndexBelowMaxForKey(k, this._limit);
