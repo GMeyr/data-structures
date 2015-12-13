@@ -5,73 +5,69 @@ var HashTable = function(){
 
 HashTable.prototype.insert = function(k, v){
   var i = getIndexBelowMaxForKey(k, this._limit);
-
-  
-    var bucket = this._storage.get(i);
-    var pair = [k,v];
-
-    if(!bucket){
-    this._storage.set(i,pair);  
-
-    } else if (this._storage.get(i)[0] === k){
-      this._storage.set(i, pair)
-
-    } else {
-      for (var j = 0; j < bucket.length; j++){
-        if(bucket[j][0] === k){
-          bucket[j][1] = v;
-        } else{
-      bucket.push(pair);
-        }
+  //this._storage.set(i, [k,v]);
+  var bucket = this._storage.get(i) || [];
+  console.log("bucket", bucket);
+  //if length 0, push
+  if( bucket.length === 0){
+    bucket.push([k,v]);
+  } else if ( bucket.length === 1 && bucket[0][0] === k ) {
+    bucket[0][1] = v;
+  } else {
+    for( var i = 0; i < bucket.length; i++ ){
+      if( bucket[i][0] === k ){
+        bucket[i][1] = v;
+      } else {
+        bucket.push([k,v]);
       }
-    this._storage.set(i,    bucket);
+    }
   }
 
+  this._storage.set(i, bucket);
 };
 
 HashTable.prototype.retrieve = function(k){
   var i = getIndexBelowMaxForKey(k, this._limit);
-  var temp = this._storage.get(i);
-  return temp[1];
+  var bucket = this._storage.get(i) || [];
+  if( bucket[0][0] === k ){
+    return bucket[0][1];
+  }
+  for(var i = 0; i < bucket.length; i++){
+    console.log(i, bucket[i]);
+    if(bucket[i][0] === k){
+      return bucket[i][1];
+    }
+  }
+
 
 };
 
 HashTable.prototype.remove = function(k){
-	var i = getIndexBelowMaxForKey(k, this._limit);
-	this._storage.set(i,[null, null]);
-	//['steven','tyler']
-/*	if(this._storage[i] !== undefined){
-		debugger;
-	  this.storage.splice(i, 1);
-	}*/
-	
+  var i = getIndexBelowMaxForKey(k, this._limit);
+  var bucket = this._storage.get(i) || [];
 
-	/*debugger;
-	for (var i = 0; i< this._storage.length; i++){
-		if(this._storage[i][0] === k){
-			this._storage.splice(i,1);
-		}
-	}
-*/
-	/*this._storage.each(function(value,index,storage){
-		if(storage[index] === k){
-			storage.splice(index,1);
-		}
-	});*/
+  if( bucket.length === 0){
+    bucket.push([k,v]);
+  } else if ( bucket.length === 1 && bucket[0][0] === k ) {
+    bucket[0][1] = v;
+  } else {
+    for( var i = 0; i < bucket.length; i++ ){
+      if( bucket[i][0] === k ){
+        bucket[i][1] = v;
+      } else {
+        bucket.push([k,v]);
+      }
+    }
+  }
+
+  this._storage.set(i, bucket);
 };
 
 
-//
+
 /*
  * Complexity: What is the time complexity of the above functions?
+   These functions have constant time lookup. In the case of collisions they require a linear operation
+   to find the right tuple in a bucket. But because that is not necesasry in the majority of cases, we say this is 
+   essentially a set of constant time solutions.
  */
-/*
-	
-  [ //this.storage
-    
-      [key,value],
-      [k, v]
-    
-    [k,v]
-    ,[k,v]]
-*/
