@@ -24,7 +24,7 @@ HashTable.prototype.insert = function(k, v){
       bucket.push(pair);
         }
       }
-    this._storage.set(i,bucket);
+    this._storage.set(i,    bucket);
   }
 
 };
