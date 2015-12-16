@@ -4,7 +4,25 @@ var HashTable = function(){
   this._stored = 0;
 };
 
+var migrateStorage = function(oldStorage, oldLimit, newLimit){
+  var oldBucket;
+  var newBucket = [];
+  var newStorage = LimitedArray(newLimit);
+  for( var i = 0; i < oldLimit; i++ ){
+    oldBucket = oldStorage.get(i);
+    if( oldBucket ){
+      oldBucket.forEach(function(tuple){
+        newBucket.push(tuple);
+      })
+    }
+    newStorage.set(i, newBucket);
+    newBucket = [];
+  }
+  return newStorage;
+}
+
 HashTable.prototype.insert = function(k, v){
+
   var i = getIndexBelowMaxForKey(k, this._limit);
   //this._storage.set(i, [k,v]);
   var bucket = this._storage.get(i) || [];
@@ -22,24 +40,20 @@ HashTable.prototype.insert = function(k, v){
       }
     }
   }
-  console.log("current limit: ", this._limit);
 
   this._storage.set(i, bucket);
   this._stored += 1;
-  if( this._stored > this._limit * 0.75 ){
-    var trueStored = 0;
-    for( var j = 0; j < this._limit; j++ ){
-      if( this._storage.get(j) ){
-        trueStored += 1;
-      }
-    }
-    if( trueStored > this._limit * 0.75 ){
-      this._limit *= 2;
-      console.log("new limit: ", this._limit)
-    }
+
+  var overThreshold = this._stored >= this._limit * 0.75;
+
+  if( overThreshold ){
+    var newLimit = this._limit * 2;
+    this._storage = migrateStorage(this._storage, this._limit, newLimit)
+    this._limit = newLimit;
+  }
 
 
-  }};
+  };
 
 
 HashTable.prototype.retrieve = function(k){
@@ -67,6 +81,7 @@ HashTable.prototype.remove = function(k){
     }
   }
   this._storage.set(i, bucket);
+  this._stored -= 1;
 
 };
 
