@@ -9,13 +9,17 @@ var migrateStorage = function(oldStorage, oldLimit, newLimit){
   var newBucket = [];
   var newStorage = LimitedArray(newLimit);
   for( var i = 0; i < oldLimit; i++ ){
+    if( oldLimit === 16 && i === 12){
+        debugger;
+      }
     oldBucket = oldStorage.get(i);
     if( oldBucket ){
       oldBucket.forEach(function(tuple){
         newBucket.push(tuple);
       })
+    //set tuple in safe way
+    newStorage.set(j, newBucket);
     }
-    newStorage.set(i, newBucket);
     newBucket = [];
   }
   return newStorage;
@@ -52,8 +56,7 @@ HashTable.prototype.insert = function(k, v){
     this._limit = newLimit;
   }
 
-
-  };
+};
 
 
 HashTable.prototype.retrieve = function(k){
@@ -82,6 +85,14 @@ HashTable.prototype.remove = function(k){
   }
   this._storage.set(i, bucket);
   this._stored -= 1;
+
+  var underThreshold = this._stored <= this._limit / 0.25;
+
+  if( underThreshold ){
+    var newLimit = this._limit / 2;
+    this._storage = migrateStorage(this._storage, this._limit, newLimit)
+    this._limit = newLimit;
+  }
 
 };
 
