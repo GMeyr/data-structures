@@ -4,12 +4,12 @@ var HashTable = function(){
   this._stored = 0;
 };
 
-var migrateStorage = function(oldStorage, oldLimit, newLimit){
+var doubleStorage = function(oldStorage, oldLimit, newLimit){
   var oldBucket;
   var newBucket = [];
   var newStorage = LimitedArray(newLimit);
   for( var i = 0; i < oldLimit; i++ ){
-    if( oldLimit === 16 && i === 12){
+    if( oldLimit === 16 && i === 8){
         debugger;
       }
     oldBucket = oldStorage.get(i);
@@ -17,10 +17,35 @@ var migrateStorage = function(oldStorage, oldLimit, newLimit){
       oldBucket.forEach(function(tuple){
         newBucket.push(tuple);
       })
-    //set tuple in safe way
-    newStorage.set(j, newBucket);
     }
+    newStorage.set(i, newBucket);
     newBucket = [];
+  }
+  return newStorage;
+}
+
+var halveStorage = function(oldStorage, oldLimit, newLimit){
+  var oldBucket;
+  var newBucket;
+  var newStorage = LimitedArray(newLimit);
+  for( var i = 0; i < oldLimit; i++ ){
+    // if( oldLimit === 16 && i === 8){
+    //     debugger;
+    //   }
+    console.log(newStorage)
+    oldBucket = oldStorage.get(i);
+    if( oldBucket ){
+    //forEach tuple in oldBucket
+      oldBucket.forEach(function(tuple){
+        var j = getIndexBelowMaxForKey(tuple[0], newLimit);
+        newBucket = newStorage.get(j);
+        if( !newBucket ){
+          newBucket = [];
+        }
+        newBucket.push([tuple[0], tuple[1]]);
+        newStorage.set(j, newBucket);
+      })
+    }
   }
   return newStorage;
 }
@@ -52,7 +77,7 @@ HashTable.prototype.insert = function(k, v){
 
   if( overThreshold ){
     var newLimit = this._limit * 2;
-    this._storage = migrateStorage(this._storage, this._limit, newLimit)
+    this._storage = doubleStorage(this._storage, this._limit, newLimit)
     this._limit = newLimit;
   }
 
@@ -75,22 +100,22 @@ HashTable.prototype.retrieve = function(k){
 };
 
 HashTable.prototype.remove = function(k){
-  var i = getIndexBelowMaxForKey(k, this._limit);
-  var bucket = this._storage.get(i) || [];
+  var m = getIndexBelowMaxForKey(k, this._limit);
+  var bucket = this._storage.get(m) || [];
   for( var i = 0; i < bucket.length; i++ ){
     if( bucket[i][0] === k ){
       console.log("found it");
       bucket[i][1 ] = null; 
     }
   }
-  this._storage.set(i, bucket);
+  this._storage.set(m, bucket);
   this._stored -= 1;
 
-  var underThreshold = this._stored <= this._limit / 0.25;
+  var underThreshold = this._stored <= this._limit * 0.25;
 
-  if( underThreshold ){
+  if( underThreshold && this._limit > 8){
     var newLimit = this._limit / 2;
-    this._storage = migrateStorage(this._storage, this._limit, newLimit)
+    this._storage = halveStorage(this._storage, this._limit, newLimit)
     this._limit = newLimit;
   }
 
