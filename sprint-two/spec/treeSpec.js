@@ -61,5 +61,15 @@ describe('tree', function() {
     expect(tree.children[0]).to.equal(null);
   });
 
+  it('should traverse the tree with a callback', function() {
+    tree.addChild(00);
+    tree.addChild(11);
+    tree.children[0].addChild(22);
+    tree.children[1].addChild(33);
+    tree.traverse(function(thing){
+      thing.value = thing.value + 100;
+    })
+    expect(tree.children[0].children[0].value).to.equal(122);
+  });
 
 });

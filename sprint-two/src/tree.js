@@ -8,6 +8,7 @@ var Tree = function(value, parent){
   newTree.contains = treeMethods.contains;
   newTree.removeFromParent = treeMethods.removeFromParent;
   newTree.parent = parent || null;
+  newTree.traverse = treeMethods.traverse;
 
   return newTree;
 };
@@ -53,6 +54,12 @@ for (var i = 0; i < this.children.length; i++){
     return false;
 };
 
+treeMethods.traverse = function(callback){
+  callback(this);
+  this.children.forEach(function(n){
+    n.traverse(callback)
+  });
+};
 
 /*
  * Complexity: What is the time complexity of the above functions?
