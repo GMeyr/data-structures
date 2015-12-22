@@ -57,13 +57,13 @@ describe('doubly-linked-list', function() {
     linkedList.addToTail(10);
     linkedList.addToTail(20);
     console.log(linkedList.head);
-    expect(linkedList.head.value.to.equal(20));
+    expect(linkedList.head.value).to.equal(10);
   })
 
   it('should point back to the head when a second node is added', function () {
     linkedList.addToTail(10);
     linkedList.addToTail(20);
-    expect(linkedList.head.next.prev.value.to.equal(10));
+    expect(linkedList.head.next.prev.value).to.equal(10);
   })
 
 });

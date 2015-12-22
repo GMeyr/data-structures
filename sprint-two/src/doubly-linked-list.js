@@ -39,11 +39,18 @@ var DoublyLinkedList = function(){
   };
 
   list.removeHead = function(){
-    var temp = this.head.next;
+    var newNode = {};
+    for(var key in this.head.next){
+      newNode[key] = this.head.next[key];
+    }
+
     var result = this.head.value;
     delete this.head;
-    this.head = temp;
-    this.head.prev = null;
+    this.head = newNode;
+    if(this.head === undefined){
+      debugger;
+    }
+    delete this.head.null;
     return result;
   };
 
