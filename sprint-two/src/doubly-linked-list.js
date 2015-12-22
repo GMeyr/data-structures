@@ -38,6 +38,22 @@ var DoublyLinkedList = function(){
     }
   };
 
+  list.addToHead = function(value){
+    var node = new Node(value);
+    if( !list.head ){
+      this.tail = node;
+      this.head = node;
+    } else {
+      var newNode = {};
+      for(var key in this.head){
+        newNode[key] = this.head[key];
+      }
+      node.next = newNode;
+      newNode.prev = node;
+      this.head = node;
+    }
+  };
+
   list.removeHead = function(){
     var newNode = {};
     for(var key in this.head.next){
@@ -53,6 +69,13 @@ var DoublyLinkedList = function(){
     delete this.head.null;
     return result;
   };
+
+  list.removeTail = function(){
+    if( this.tail ){
+      this.tail = this.tail.prev
+      this.tail.next = undefined;
+    }
+  }
 
   list.contains = function(target){
     return checkNext(this.head, target, 'next');

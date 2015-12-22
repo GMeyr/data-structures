@@ -58,12 +58,38 @@ describe('doubly-linked-list', function() {
     linkedList.addToTail(20);
     console.log(linkedList.head);
     expect(linkedList.head.value).to.equal(10);
-  })
+  });
 
   it('should point back to the head when a second node is added', function () {
     linkedList.addToTail(10);
     linkedList.addToTail(20);
     expect(linkedList.head.next.prev.value).to.equal(10);
-  })
+  });
+
+    it('should update the head when calling addToTail then addToHead', function(){
+    linkedList.addToTail(4);
+    linkedList.addToHead(5);
+    expect(linkedList.head.value).to.equal(5);
+  });
+
+    it('should update the head when calling addToHead then addToHead', function(){
+    linkedList.addToHead(4);
+    linkedList.addToHead(5);
+    expect(linkedList.head.value).to.equal(5);
+  });
+
+    it('should not contain a value after using remove tail', function(){
+    linkedList.addToTail(4);
+    linkedList.addToTail(5);
+    linkedList.removeTail();
+    expect(linkedList.contains(5)).to.equal(false);
+  });
+
+    it('should point to the right tail after using remove tail', function(){
+    linkedList.addToTail(4);
+    linkedList.addToTail(5);
+    linkedList.removeTail();
+    expect(linkedList.tail.value).to.equal(4);
+  });
 
 });
