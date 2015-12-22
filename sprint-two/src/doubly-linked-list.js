@@ -43,6 +43,7 @@ var DoublyLinkedList = function(){
     var result = this.head.value;
     delete this.head;
     this.head = temp;
+    this.head.prev = null;
     return result;
   };
 

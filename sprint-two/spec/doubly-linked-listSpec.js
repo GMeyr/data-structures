@@ -56,7 +56,8 @@ describe('doubly-linked-list', function() {
   it('should point to the next node if not tail', function(){
     linkedList.addToTail(10);
     linkedList.addToTail(20);
-    expect(linkedList.head.next.value.to.equal(20));
+    console.log(linkedList.head);
+    expect(linkedList.head.value.to.equal(20));
   })
 
   it('should point back to the head when a second node is added', function () {
