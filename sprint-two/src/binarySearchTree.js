@@ -6,6 +6,7 @@ var BinarySearchTree = function(value){
   newTree.insert = binarySearchTree.insert;
   newTree.contains = binarySearchTree.contains;
   newTree.depthFirstLog = binarySearchTree.depthFirstLog;
+  newTree.breadthFirstLog = binarySearchTree.breadthFirstLog;
   newTree.count = 0;
   return newTree;
 };
@@ -64,19 +65,64 @@ return false;
  */
 
 binarySearchTree.depthFirstLog = function(callback,n) {
-var node = null;
-if (arguments.length < 2){
-  node = this;
-} else { 
-  node = n
-}
-callback(node.value)
-if (node.left){
-  this.depthFirstLog(callback,node.left)
-} 
-if (node.right) {
-  this.depthFirstLog(callback,node.right);
-}
+  var node = null;
+  if (arguments.length < 2){
+    node = this;
+  } else { 
+    node = n
+  }
+  callback(node.value);
+  if (node.left){
+    this.depthFirstLog(callback,node.left)
+  } 
+  if (node.right) {
+    this.depthFirstLog(callback,node.right);
+  }
+};
 
+binarySearchTree.breadthFirstLog = function(callback){
 
+  callback(this.value);
+
+  var queue = new Queue();
+
+  var traverse = function(node){
+    if( node.left ){
+      queue.insert(node.left.value);
+    };
+    if( node.right ){
+      queue.insert(node.right.value);
+    };
+    if( node.left ){
+      traverse(node.left);
+    };
+    if( node.right ){
+      traverse(node.right)
+    };
+  };
+
+  traverse(this);
+  
+  var callbackOnQueue = function(current, callback){
+    if( !current ){
+      return;
+    }
+
+    callback(current);
+    var next = queue.retrieve();
+    callbackOnQueue(next, callback);
+  }
+  
+  var start = queue.retrieve();
+  callbackOnQueue(start, callback);
+};
+
+var Queue = function(){
+  this.storage = [];
+  this.insert = function(node){
+    this.storage.push(node);
+  }
+  this.retrieve = function(){
+    return this.storage.splice(0, 1)[0];
+  }
 };

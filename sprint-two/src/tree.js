@@ -63,4 +63,8 @@ treeMethods.traverse = function(callback){
 
 /*
  * Complexity: What is the time complexity of the above functions?
+ addChild: constant time;
+ removeFromParent: linear time;
+ contains: linear;
+ traverse: linear;
  */
