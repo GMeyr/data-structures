@@ -1,4 +1,4 @@
-var Tree = function(value){
+var Tree = function(value, parent){
   var newTree = {};
   newTree.value = value;
 
@@ -6,6 +6,8 @@ var Tree = function(value){
   newTree.children = [];  // fix me
   newTree.addChild = treeMethods.addChild;
   newTree.contains = treeMethods.contains;
+  newTree.removeFromParent = treeMethods.removeFromParent;
+  newTree.parent = parent || null;
 
   return newTree;
 };
@@ -17,9 +19,25 @@ var Tree = function(value){
 var treeMethods = {};
 
 treeMethods.addChild = function(value){
-  var newTree = new Tree(value);
+  var newTree = new Tree(value, this);
   this.children.push(newTree);
 };
+
+treeMethods.removeFromParent = function(){
+  var copy = {};
+  for(var key in this){
+    copy[key] = this[key];
+  }
+  var children = this.parent.children;
+  var idx = children.indexOf(this);
+  removed = children.splice(idx, 1, null);
+
+  for(var key2 in copy){
+    this[key2] = copy[key2];
+  }
+  this.parent = null;
+
+}
 
 treeMethods.contains = function(target){
 
