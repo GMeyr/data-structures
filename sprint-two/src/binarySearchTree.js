@@ -62,6 +62,10 @@ return false;
 };
 /*
  * Complexity: What is the time complexity of the above functions?
+placeNode is linear because you have to start iterating though the tree to find a spot for the item.
+contains is also linear.
+depthFirstLog and breadthFirstLog are also linear.
+
  */
 
 binarySearchTree.depthFirstLog = function(callback,n) {

@@ -45,6 +45,8 @@ setPrototype.remove = function(item){
 
 /*
  * Complexity: What is the time complexity of the above functions?
+Everything is constant time except for contains, which is linear time.
+
  */
 /*
 [s,d,f,g,h,s]

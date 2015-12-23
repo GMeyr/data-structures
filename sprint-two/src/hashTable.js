@@ -9,9 +9,7 @@ var doubleStorage = function(oldStorage, oldLimit, newLimit){
   var newBucket = [];
   var newStorage = LimitedArray(newLimit);
   for( var i = 0; i < oldLimit; i++ ){
-    if( oldLimit === 16 && i === 8){
-        debugger;
-      }
+
     oldBucket = oldStorage.get(i);
     if( oldBucket ){
       oldBucket.forEach(function(tuple){
@@ -29,9 +27,7 @@ var halveStorage = function(oldStorage, oldLimit, newLimit){
   var newBucket;
   var newStorage = LimitedArray(newLimit);
   for( var i = 0; i < oldLimit; i++ ){
-    // if( oldLimit === 16 && i === 8){
-    //     debugger;
-    //   }
+
     console.log(newStorage)
     oldBucket = oldStorage.get(i);
     if( oldBucket ){
@@ -128,4 +124,6 @@ HashTable.prototype.remove = function(k){
    These functions have constant time lookup. In the case of collisions they require a linear operation
    to find the right tuple in a bucket. But because that is not necesasry in the majority of cases, we say this is 
    essentially a set of constant time solutions.
+
+   Resizing the table is expensive though, and takes place in quadratic time.
  */

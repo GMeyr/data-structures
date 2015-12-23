@@ -29,12 +29,7 @@ if(this.storage[node] !== undefined){
 // ------------------------
 // Removes a node from the graph.
 Graph.prototype.removeNode = function(node){
-  
-  for (var key in this.storage) {
-    if(key === node){
-	 delete this.storage[key];
-    }
-  }	
+	 delete this.storage[node];
 };
 
 // ------------------------
@@ -86,6 +81,7 @@ Graph.prototype.forEachNode = function(cb){
 
 /*
  * Complexity: What is the time complexity of the above functions?
+ Adding and removing edges is linear time complexity, but the rest are constant time.
  */
 
 

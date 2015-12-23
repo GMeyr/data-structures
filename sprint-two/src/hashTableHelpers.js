@@ -51,4 +51,5 @@ var getIndexBelowMaxForKey = function(str, max){
 
 /*
  * Complexity: What is the time complexity of the above functions?
+ Everything is constant time lookup except for each, which is linear time.
  */
