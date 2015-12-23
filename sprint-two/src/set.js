@@ -8,6 +8,12 @@ var Set = function(){
 var setPrototype = {};
 
 setPrototype.add = function(item){
+  if(item === undefined){
+    item = "undefined";
+  }
+  if( item === null ){
+    item = "null";
+  }
 
   item = item.toString();
   if(this.strings[item] === undefined){
@@ -16,9 +22,13 @@ setPrototype.add = function(item){
 };
 
 setPrototype.contains = function(item){
-    if(item === 7){
-    debugger;
+  if(item === undefined){
+    item = "undefined";
   }
+  if( item === null ){
+    item = "null";
+  }
+
   item = item.toString();
   for(var key in this.strings){
   	if(key === item){
