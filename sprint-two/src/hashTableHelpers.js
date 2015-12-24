@@ -49,6 +49,34 @@ var getIndexBelowMaxForKey = function(str, max){
   return hash % max;
 };
 
+//Hash functions for Bloom Filter
+
+var universalHash = function (s, tableSize) {
+  var b = 27183, h = 0, a = 31415;
+ 
+  if (tableSize > 1) {
+    for (i = 0; i < s.length; i++) {
+      h = (a * h + s[i].charCodeAt()) % tableSize;
+      a = ((a % tableSize) * (b % tableSize)) % (tableSize);
+    }
+  }
+ 
+return h;
+}
+
+var simpleHash =  function (s, tableSize) {
+  var i, hash = 0;
+ 
+  for (i = 0; i < s.length; i++) {
+    hash += (s[i].charCodeAt() * (i+1));
+  }
+ 
+  return Math.abs(hash) % tableSize;
+}
+
+function divisionHash(s, tableSize) {
+return s.length % tableSize;
+}
 /*
  * Complexity: What is the time complexity of the above functions?
  Everything is constant time lookup except for each, which is linear time.
