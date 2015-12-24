@@ -49,4 +49,31 @@ describe('binarySearchTree', function() {
     console.log(array);
     expect(array).to.eql([5,2,7,3,6]);
   });
+
+  xit('should rebalance a small tree when depth is more than twice max depth', function(){
+    binarySearchTree.value = 1;
+    binarySearchTree.insert(2);
+    binarySearchTree.insert(3);
+    binarySearchTree.insert(4);
+    expect(binarySearchTree.value).to.equal(3);
+    expect(binarySearchTree.left.value).to.equal(1);
+    expect(binarySearchTree.right.value).to.equal(4);
+    expect(binarySearchTree.left.right.value).to.equal(2);
+  });
+
+  it('should rebalance a bigger tree when depth is more than twice max depth', function(){
+    binarySearchTree.value = 1;
+    binarySearchTree.insert(2);
+    binarySearchTree.insert(3);
+    binarySearchTree.insert(4);
+    binarySearchTree.insert(5);
+    binarySearchTree.insert(6);
+    binarySearchTree.insert(7);
+    expect(binarySearchTree.value).to.equal(4);
+    expect(binarySearchTree.left.value).to.equal(3);
+    expect(binarySearchTree.right.value).to.equal(5);
+    expect(binarySearchTree.left.left.value).to.equal(2); 
+    expect(binarySearchTree.right.right.value).to.equal(7);
+    expect(binarySearchTree.right.left.value).to.equal(5);
+  });
 });
